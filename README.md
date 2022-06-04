@@ -10,4 +10,5 @@
 
 Все сущности имплментирует интерфейс [`Expression`](src/ru/itmo/idedev/utils/Expression.java).
 
+В парсере [`Parser`](src/ru/itmo/idedev/utils/Parser.java) определен метод `run`, который складывает на стэк операции и выражения. С помощью интерфеса [`Visitor`](src/ru/itmo/idedev/utils/VisitorImpl.java) осуществляется сбор результата работы парсера.
 
