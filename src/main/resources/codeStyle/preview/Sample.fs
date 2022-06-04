@@ -1,17 +1,18 @@
-5 2 3 56 76 23 65
-
-.s
-
-5 4 +
-
-.
-
-6 7 * .
-1360 23 - .
+( numbers and math operations)
+3 4 + .
 12 12 / .
-13 2 mod .
+1360 23 - .
+17 4 mod .
 
-99 negate .
--99 abs .
-52 23 max .
-52 23 min .
+( string )
+." regular forth string"
+
+( constants )
+false false and
+true false =
+
+( keywords and compile block )
+: .less64 ( n -- n ) dup 64 > if ." Greater than 64!" else ." Less than 64!" then ;
+
+( compile mod block )
+: sqaure dup * ;
