@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 public class ForthColorSettingsPage implements ColorSettingsPage {
     private String DEMO_TEXT = CodeStyleAbstractPanel.readFromFile(ForthLanguage.class, "Sample.fs");
-    
+
     @Nullable
     @Override
     public Icon getIcon() {

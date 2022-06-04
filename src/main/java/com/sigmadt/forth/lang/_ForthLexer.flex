@@ -24,20 +24,18 @@ InputCharacter = [^\r\n]
 Whitespace = {LineTerminator} | [ \t\f]
 Alpha      = [a-zA-Z]
 Num        = [0-9]
-//AlphaNum   = {Alpha} | {Num}
-//Underscore = _
 
-//Identifier = ({Underscore} | {Alpha}) {AlphaNum}*
+Number = {Num}+
+AlphaNum   = {Alpha} | {Num}
+Dot = .
 
-DoubleQuotedString = (.\" ([^\"\r\n\\]|\\.)*\")
+//Variable = ({Dot}{Alpha}){AlphaNum}*
+
+DoubleQuotedString = (.\"\ ([^\"\r\n\\]|\\.)*\")
 
 LineComment  = (\(([^\"\r\n\\]|\\.)*\))
 
 
-/* Real Numbers */
-
-//RealNumber = ([0-9]+\.[0-9]*|[0-9]*\.[0-9]+) {Exponent}?
-//Exponent   = [eE] [+-]? [0-9]+
 
 %state LITERAL_STRING
 
@@ -62,6 +60,7 @@ LineComment  = (\(([^\"\r\n\\]|\\.)*\))
     "until"             { return ForthTokenType.getUNTIL(); }
     "begin"             { return ForthTokenType.getBEGIN(); }
     "until"             { return ForthTokenType.getUNTIL(); }
+    "loop"             { return ForthTokenType.getLOOP(); }
 
     /* Compile mode */
     ":"                 { return ForthTokenType.getDOUBLE_COLON(); }
@@ -102,8 +101,12 @@ LineComment  = (\(([^\"\r\n\\]|\\.)*\))
 /* String Literals */
 {DoubleQuotedString}    { return ForthTokenType.getSTRING(); }
 
+/* Numbers */
+{Number}                { return ForthTokenType.getNUMBER(); }
 
+/* Variable
 
+{Variable}                { return ForthTokenType.getVAR(); }*/
 
 /* error fallback */
 [^]                     { return BAD_CHARACTER; }

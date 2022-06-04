@@ -92,7 +92,7 @@ public class ForthTokenType extends IElementType {
 
     public static TokenSet STRINGS = TokenSet.create(STRING);
 
-    public static TokenSet CONSTANTS = TokenSet.create(CONST);
+    public static TokenSet CONSTANTS = TokenSet.create(TRUE, FALSE);
 
     public static ForthTokenType getDoubleColon() {
         return DOUBLE_COLON;

@@ -21,15 +21,18 @@ public enum ForthTextAttributeKeys {
     public String humanName;
     public TextAttributesKey fallback;
 
+    public TextAttributesKey key;
+    public AttributesDescriptor descriptor;
+
     ForthTextAttributeKeys(String humanName, TextAttributesKey fallback) {
         this.humanName = humanName;
         this.fallback = fallback;
+
+        key = TextAttributesKey.createTextAttributesKey(
+                String.format("Forth.%s", name()),
+                fallback);
+
+        descriptor = new AttributesDescriptor(humanName, key);
     }
-
-    public TextAttributesKey key = TextAttributesKey.createTextAttributesKey(
-            String.format("Forth.%s", name()),
-            fallback);
-    public AttributesDescriptor descriptor = new AttributesDescriptor(humanName, key);
-
 
 }
