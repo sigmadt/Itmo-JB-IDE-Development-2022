@@ -1,0 +1,31 @@
+<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
+<idea-plugin>
+    <id>com.github.sigmadt.intellijforth</id>
+    <name>Forth</name>
+    <vendor>sigmadt</vendor>
+
+    <depends>com.intellij.modules.lang</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <fileType
+                name="Forth"
+                implementationClass="com.sigmadt.forth.lang.ForthFileType"
+                fieldName="INSTANCE"
+                language="Forth"
+                extensions="fs"
+        />
+        <lang.syntaxHighlighterFactory
+                language="Forth"
+                implementationClass="com.sigmadt.forth.ide.ForthSyntaxHighlighterFactory"
+        />
+<!--        <lang.parserDefinition-->
+<!--                language="forth"-->
+<!--                implementationClass="com.sigmadt.forth.lang.ForthParserDefinition"-->
+<!--        />-->
+        <colorSettingsPage implementation="com.sigmadt.forth.ide.ForthColorSettingsPage"/>
+    </extensions>
+
+    <applicationListeners>
+
+    </applicationListeners>
+</idea-plugin>
