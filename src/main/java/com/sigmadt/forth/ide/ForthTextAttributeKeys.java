@@ -1,6 +1,7 @@
 package com.sigmadt.forth.ide;
 
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors;
+import com.intellij.openapi.editor.HighlighterColors;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.options.colors.AttributesDescriptor;
 
@@ -8,14 +9,18 @@ public enum ForthTextAttributeKeys {
     COMMENT("Comment", DefaultLanguageHighlighterColors.DOC_COMMENT),
     STRING("String//String text", DefaultLanguageHighlighterColors.STRING),
     CONSTANT("Built in constants", DefaultLanguageHighlighterColors.CONSTANT),
-    NUMBER("Number//Number", DefaultLanguageHighlighterColors.NUMBER),
+    NUMBER("Number", DefaultLanguageHighlighterColors.NUMBER),
     KEYWORD("Keyword", DefaultLanguageHighlighterColors.KEYWORD),
+
+    STACK_OPERATIONS("Stack//Operations",
+                    TextAttributesKey.createTextAttributesKey("ANNOTATION_NAME_ATTRIBUTES")),
 
     DOUBLE_COLON("Braces and Operators//Double colon", DefaultLanguageHighlighterColors.DOT),
     SEMICOLON("Braces and Operators//Semicolon", DefaultLanguageHighlighterColors.SEMICOLON),
     DOT("Braces and Operators//Dot", DefaultLanguageHighlighterColors.DOT),
 
-    OPERATOR("Braces and Operators//Operators", DefaultLanguageHighlighterColors.OPERATION_SIGN);
+    OPERATOR("Braces and Operators//Operators", DefaultLanguageHighlighterColors.OPERATION_SIGN),
+    IDENTIFIER("Identifier", DefaultLanguageHighlighterColors.IDENTIFIER);
 
 
     public String humanName;

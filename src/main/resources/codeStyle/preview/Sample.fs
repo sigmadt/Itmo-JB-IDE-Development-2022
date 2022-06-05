@@ -12,7 +12,15 @@ false false and
 true false =
 
 ( keywords and compile block )
-: .less64 ( n -- n ) dup 64 > if ." Greater than 64!" else ." Less than 64!" then ;
+: less17 ( n -- n ) dup 17 > if ." Greater than 17!" else ." Less than 17!" then ;
 
 ( compile mod block )
 : sqaure dup * ;
+
+( stack operations )
+dup
+.
+rot 3
+drop
+.s
+2 swap

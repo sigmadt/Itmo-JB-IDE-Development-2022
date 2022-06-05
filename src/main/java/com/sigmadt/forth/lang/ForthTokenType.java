@@ -54,7 +54,7 @@ public class ForthTokenType extends IElementType {
     private static ForthTokenType OVER = new ForthTokenType("OVER"); // over
     private static ForthTokenType DROP = new ForthTokenType("DROP"); // drop
 
-    private static ForthTokenType VAR = new ForthTokenType("VAR"); // variable
+    private static ForthTokenType IDENTIFIER = new ForthTokenType("IDENTIFIER"); // IDENTIFIER
     private static ForthTokenType CONST = new ForthTokenType("CONST"); // constant
     private static ForthTokenType KEY = new ForthTokenType("KEY"); // key
 
@@ -70,18 +70,23 @@ public class ForthTokenType extends IElementType {
             DOUBLE_COLON, SEMICOLON,
             IF, ELSE, THEN,
             DO, LOOP, BEGIN, UNTIL,
-            CONST, KEY, VAR,
-            AND, OR
+            CONST, KEY, IDENTIFIER
+
             );
 
+    public static TokenSet STACK_OPERATIONS =
+            TokenSet.create(
+                    DOT, STACK, SWAP,
+                    DUP, ROT, OVER,
+                    DROP
+            );
 
     public static TokenSet OPERATORS =
             TokenSet.create(
                     ADD, SUB, MUL, DIV, MOD, DIV_AND_MOD,
-                    DOT, STACK,
                     EQUAL, LESS, GREATER,
-                    EMIT, SWAP, DUP,
-                    ROT, OVER, DROP);
+                    EMIT, AND, OR
+            );
 
     public static TokenSet IDENTS =
             TokenSet.create(SPACE, NEW_LINE);
@@ -234,8 +239,8 @@ public class ForthTokenType extends IElementType {
         return DROP;
     }
 
-    public static ForthTokenType getVAR() {
-        return VAR;
+    public static ForthTokenType getIDENTIFIER() {
+        return IDENTIFIER;
     }
 
     public static ForthTokenType getCONST() {
