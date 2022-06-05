@@ -22,6 +22,9 @@ public class ForthSyntaxHighlighter extends SyntaxHighlighterBase {
         fillMap(elementTextAttributes, ForthTokenType.COMMENTS, ForthTextAttributeKeys.COMMENT.key);
         fillMap(elementTextAttributes, ForthTokenType.STRINGS, ForthTextAttributeKeys.STRING.key);
         fillMap(elementTextAttributes, ForthTokenType.CONSTANTS, ForthTextAttributeKeys.CONSTANT.key);
+        fillMap(elementTextAttributes, ForthTokenType.STACK_OPERATIONS, ForthTextAttributeKeys.STACK_OPERATIONS.key);
+
+        elementTextAttributes.put(ForthTokenType.getIDENTIFIER(), ForthTextAttributeKeys.IDENTIFIER.key);
     }
 
 

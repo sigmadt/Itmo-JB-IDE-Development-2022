@@ -4,6 +4,7 @@ import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
 import com.sigmadt.forth.lang.ForthTokenType;
 
+import static com.intellij.psi.TokenType.WHITE_SPACE;
 import static com.intellij.psi.TokenType.BAD_CHARACTER;
 
 %%
@@ -19,7 +20,6 @@ import static com.intellij.psi.TokenType.BAD_CHARACTER;
 
 /* Main Character Classes */
 LineTerminator = \r|\n|\r\n
-InputCharacter = [^\r\n]
 
 Whitespace = {LineTerminator} | [ \t\f]
 Alpha      = [a-zA-Z]
@@ -27,14 +27,13 @@ Num        = [0-9]
 
 Number = {Num}+
 AlphaNum   = {Alpha} | {Num}
-Dot = .
+Dot = (\.)
 
-//Variable = ({Dot}{Alpha}){AlphaNum}*
+Identifier = ({Alpha}) {AlphaNum}*
 
-DoubleQuotedString = (.\"\ ([^\"\r\n\\]|\\.)*\")
+DoubleQuotedString = (\.\"\s[^\"]*\")
 
-LineComment  = (\(([^\"\r\n\\]|\\.)*\))
-
+LineComment  = (\(.*\))
 
 
 %state LITERAL_STRING
@@ -104,9 +103,12 @@ LineComment  = (\(([^\"\r\n\\]|\\.)*\))
 /* Numbers */
 {Number}                { return ForthTokenType.getNUMBER(); }
 
-/* Variable
+/* Variable */
 
-{Variable}                { return ForthTokenType.getVAR(); }*/
+{Identifier}                { return ForthTokenType.getIDENTIFIER(); }
+
+/* WhiteSpace */
+{Whitespace}            { return WHITE_SPACE; }
 
 /* error fallback */
 [^]                     { return BAD_CHARACTER; }
