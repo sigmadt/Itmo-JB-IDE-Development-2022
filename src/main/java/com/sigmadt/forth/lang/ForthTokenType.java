@@ -84,8 +84,22 @@ public class ForthTokenType extends IElementType {
     public static TokenSet OPERATORS =
             TokenSet.create(
                     ADD, SUB, MUL, DIV, MOD, DIV_AND_MOD,
-                    EQUAL, LESS, GREATER,
                     EMIT, AND, OR
+            );
+
+    public static TokenSet COMPARISON_OPERATORS =
+            TokenSet.create(
+                    EQUAL, LESS, GREATER
+            );
+
+    public static TokenSet LOW_PRIOR_OPERATORS =
+            TokenSet.create(
+                    ADD, SUB, OR
+            );
+
+    public static TokenSet HIGH_PRIOR_OPERATORS =
+            TokenSet.create(
+                    MUL, DIV, MOD, DIV_AND_MOD, AND
             );
 
     public static TokenSet IDENTS =

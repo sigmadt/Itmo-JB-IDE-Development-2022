@@ -15,11 +15,12 @@ public enum ForthTextAttributeKeys {
     STACK_OPERATIONS("Stack//Operations",
                     TextAttributesKey.createTextAttributesKey("ANNOTATION_NAME_ATTRIBUTES")),
 
-    DOUBLE_COLON("Braces and Operators//Double colon", DefaultLanguageHighlighterColors.DOT),
-    SEMICOLON("Braces and Operators//Semicolon", DefaultLanguageHighlighterColors.SEMICOLON),
-    DOT("Braces and Operators//Dot", DefaultLanguageHighlighterColors.DOT),
+    DOUBLE_COLON("Operators//Double colon", DefaultLanguageHighlighterColors.DOT),
+    SEMICOLON("Operators//Semicolon", DefaultLanguageHighlighterColors.SEMICOLON),
+    DOT("Operators//Dot", DefaultLanguageHighlighterColors.DOT),
 
-    OPERATOR("Braces and Operators//Operators", DefaultLanguageHighlighterColors.OPERATION_SIGN),
+    OPERATOR("Operators//Operators", DefaultLanguageHighlighterColors.OPERATION_SIGN),
+    COMP_OPERATOR("Operators//Comparison operators", DefaultLanguageHighlighterColors.OPERATION_SIGN),
     IDENTIFIER("Identifier", DefaultLanguageHighlighterColors.IDENTIFIER);
 
 

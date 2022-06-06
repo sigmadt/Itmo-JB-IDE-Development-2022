@@ -23,6 +23,9 @@
 <!--                implementationClass="com.sigmadt.forth.lang.ForthParserDefinition"-->
 <!--        />-->
         <colorSettingsPage implementation="com.sigmadt.forth.ide.ForthColorSettingsPage"/>
+<!--        <additionalTextAttributes-->
+<!--                scheme="Darcula"-->
+<!--                file="colorSchemes/MyLangOper.xml"/>-->
     </extensions>
 
     <applicationListeners>

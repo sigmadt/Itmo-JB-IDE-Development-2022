@@ -17,7 +17,9 @@ public class ForthSyntaxHighlighter extends SyntaxHighlighterBase {
 
     public ForthSyntaxHighlighter() {
         fillMap(elementTextAttributes, ForthTokenType.KEYWORDS, ForthTextAttributeKeys.KEYWORD.key);
-        fillMap(elementTextAttributes, ForthTokenType.OPERATORS, ForthTextAttributeKeys.OPERATOR.key);
+        fillMap(elementTextAttributes, ForthTokenType.LOW_PRIOR_OPERATORS, ForthTextAttributeKeys.OPERATOR.key);
+        fillMap(elementTextAttributes, ForthTokenType.HIGH_PRIOR_OPERATORS, ForthTextAttributeKeys.OPERATOR.key);
+        fillMap(elementTextAttributes, ForthTokenType.COMPARISON_OPERATORS, ForthTextAttributeKeys.COMP_OPERATOR.key);
         fillMap(elementTextAttributes, ForthTokenType.NUMBERS, ForthTextAttributeKeys.NUMBER.key);
         fillMap(elementTextAttributes, ForthTokenType.COMMENTS, ForthTextAttributeKeys.COMMENT.key);
         fillMap(elementTextAttributes, ForthTokenType.STRINGS, ForthTextAttributeKeys.STRING.key);
