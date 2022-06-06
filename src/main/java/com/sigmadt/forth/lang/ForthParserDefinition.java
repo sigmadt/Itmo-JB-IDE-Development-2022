@@ -30,24 +30,34 @@ public class ForthParserDefinition implements ParserDefinition {
     }
 
     @Override
-    public IFileElementType getFileNodeType() {
-        return FILE;
+    public @NotNull IFileElementType getFileNodeType() {
+        return ForthElementType.getForthStubFile();
     }
 
     @Override
-    public PsiFile createFile(FileViewProvider viewProvider) {
+    public @NotNull TokenSet getCommentTokens() {
+        return ForthTokenType.COMMENTS;
+    }
+
+    @Override
+    public @NotNull TokenSet getStringLiteralElements() {
+        return ForthTokenType.STRINGS;
+    }
+
+    @Override
+    public @NotNull PsiFile createFile(@NotNull FileViewProvider viewProvider) {
         return new ForthFile(viewProvider);
     }
 
     @Override
-    public SpaceRequirements spaceExistenceTypeBetweenTokens(ASTNode left, ASTNode right) {
+    public @NotNull SpaceRequirements spaceExistenceTypeBetweenTokens(ASTNode left, ASTNode right) {
         return SpaceRequirements.MAY;
     }
 
     @NotNull
     @Override
     public PsiElement createElement(ASTNode node) {
-        return ForthTypes.Factory.createElement(node);
+        return ForthElementType.createElement(node);
     }
 
 }

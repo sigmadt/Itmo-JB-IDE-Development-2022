@@ -14,8 +14,8 @@ public class ForthParser implements PsiParser {
         public  ASTNode parse(@NotNull IElementType root, @NotNull PsiBuilder builder) {
             builder.setDebugMode(true);
             var inner = new InnerParser(builder);
-            inner(builder).parseChunk();
-            return builder.treeBuilt;
+            inner.parseFile();
+            return builder.getTreeBuilt();
         }
 
     private class InnerParser {
@@ -28,16 +28,48 @@ public class ForthParser implements PsiParser {
             public void parseFile() {
                 var mark = builder.mark();
 
-                parseBlock();
+                parseAnyBlock();
 
+                mark.done(ForthElementType.getForthFile());
             }
 
+            /*
+            in forth file u can just type numbers, they will be pushed on stack
+            so all that's matter is compile mode block,
+            because if, do and other keywords are compile-mode only
+             */
 
-            public void parseBlock() {
+            public void parseAnyBlock() {
                 var mark = builder.mark();
 
-                parseIfBlock();
+                while (builder.getTokenType() != null) {
+                    if (builder.getTokenType().equals(ForthTokenType.getDOUBLE_COLON())) {
+                        parseCompileModeBlock();
+                    } else {
+                        parseStatement();
+                    }
+                }
 
+                mark.done(ForthElementType.getForthBlock());
+            }
+
+            public void parseStatement() {
+                var mark = builder.mark();
+
+                while (ForthTokenType.ANY_GOOD_TOKENS.contains(builder.getTokenType())) {
+                    var currElem = builder.getTokenType();
+                    if (ForthTokenType.QUALIFIERS.contains(currElem)) {
+                        parseQualifiers();
+                    }
+                    else if (ForthTokenType.STACK_OPERATIONS.contains(currElem)) {
+                        parseStackOperations();
+                    }
+                    else if (ForthTokenType.ANY_FUNCTION.contains(currElem)) {
+                        parseMathOperations();
+                    }
+                }
+
+                mark.done(ForthElementType.getSTATEMENT());
 
             }
 
@@ -77,6 +109,8 @@ public class ForthParser implements PsiParser {
                 parseDoLoopStatement();
                 parseBeginUntilStatement();
 
+                mark.done(ForthElementType.getCompileModeBody());
+
             }
 
             /*  (cond) if (iftrue) else (elsetrue) then (work here)   */
@@ -90,15 +124,38 @@ public class ForthParser implements PsiParser {
                 parseExpression(); // (cond)
                 expectAdvance(ForthTokenType.getIF(), "if");
                 parseStatement(); // (iftrue)
-                if (builder.tokenType == PascalTokenType.ELSE) {
+                if (builder.getTokenType().equals(ForthTokenType.getELSE())) {
                     expectAdvance(ForthTokenType.getELSE(), "else");
                     parseStatement(); // (elsetrue)
                 }
                 expectAdvance(ForthTokenType.getTHEN(), "then");
                 parseStatement();
 
-
+                mark.done(ForthElementType.getIfElseThenStatement());
             }
+
+            // numbers | identifiers | strings
+            public void parseQualifiers() {
+                var mark = builder.mark();
+
+                while (ForthTokenType.QUALIFIERS.contains(builder.getTokenType())) {
+                    if (builder.getTokenType().equals(ForthTokenType.getNUMBER())) {
+                        expectAdvance(ForthTokenType.getNUMBER(), "NUMBER");
+                    }
+                    else if (builder.getTokenType().equals(ForthTokenType.getSTRING())) {
+                        expectAdvance(ForthTokenType.getSTRING(), "STRING");
+                    }
+                    else if (builder.getTokenType().equals(ForthTokenType.getIDENTIFIER())) {
+                        expectAdvance(ForthTokenType.getIDENTIFIER(), "IDENTIFIER");
+                    }
+                }
+
+                mark.done(ForthElementType.getQUALIFIERS());
+            }
+
+
+
+
             public void parseExpression() {
                 var mark = builder.mark();
 
@@ -133,16 +190,16 @@ public class ForthParser implements PsiParser {
                 var mark = builder.mark();
 
                 parseInnerTerm();
-                while (ForthTokenType.LOW_PRIOR_OPERATORS.contains(builder.getTokenType())) {
+                while (ForthTokenType.OPERATORS.contains(builder.getTokenType())) {
                     parseInnerTerm();
-                    parseMathOper();
+                    parseMathOperations();
                 }
 
                 mark.done(ForthElementType.getMathExpression());
             }
 
             // + - or
-            public void parseMathOper() {
+            public void parseMathOperations() {
                 var mark = builder.mark();
 
                 IElementType tokenType = builder.getTokenType();
@@ -167,36 +224,87 @@ public class ForthParser implements PsiParser {
                 mark.done(ForthElementType.getMathOperations());
             }
 
+            public void parseStackOperations() {
+                var mark = builder.mark();
+                while (ForthTokenType.ANY_GOOD_TOKENS.contains(builder.getTokenType())) {
+                    if (builder.getTokenType().equals(ForthTokenType.getROT())) {
+                        expectAdvance(ForthTokenType.getROT(), "ROT");
+                    }
+                    else if (builder.getTokenType().equals(ForthTokenType.getOVER())) {
+                        expectAdvance(ForthTokenType.getOVER(), "OVER");
+                    }
+                    else if (builder.getTokenType().equals(ForthTokenType.getDOT())) {
+                        expectAdvance(ForthTokenType.getDOT(), "DOT");
+                    }
+                    else if (builder.getTokenType().equals(ForthTokenType.getSTACK())) {
+                        expectAdvance(ForthTokenType.getSTACK(), "STACK");
+                    }
+                    else if (builder.getTokenType().equals(ForthTokenType.getSWAP())) {
+                        expectAdvance(ForthTokenType.getSWAP(), "SWAP");
+                    }
+                    else if (builder.getTokenType().equals(ForthTokenType.getDUP())) {
+                        expectAdvance(ForthTokenType.getDUP(), "DUP");
+                    }
+                    else if (builder.getTokenType().equals(ForthTokenType.getDROP())) {
+                        expectAdvance(ForthTokenType.getDROP(), "DROP");
+                    }
+
+                }
+                mark.done(ForthElementType.getStackOperations());
+            }
+
             public void parseInnerTerm() {
                 var mark = builder.mark();
+                parseParameterList();
+                mark.done(ForthElementType.getInnerTermExpression());
 
-                parseTerm();
-                while (ForthTokenType.LOW_PRIOR_OPERATORS.contains(builder.getTokenType())) {
-                    parseLowPriorOper();
-                    parseTerm();
+            }
+
+            public void parseNum() {
+                var mark = builder.mark();
+                expectAdvance(ForthTokenType.getNUMBER(), "NUMBER");
+                mark.done(ForthElementType.getNUMBER());
+            }
+
+            public void parseString() {
+                var mark = builder.mark();
+                expectAdvance(ForthTokenType.getSTRING(), "STRING");
+                mark.done(ForthElementType.getSTRING());
+            }
+
+            // parameters are always numbers and parse until variable
+            public void parseParameterList() {
+                var mark = builder.mark();
+
+                while (!ForthTokenType.ANY_FUNCTION.contains(builder.getTokenType())) {
+                    if (builder.getTokenType().equals(ForthTokenType.getIDENTIFIER())) {
+                        parseIdentifier();
+                    }
+                    parseNum();
                 }
 
-                mark.done(ForthElementType.getMathExpression());
-
-
-
-
+                mark.done(ForthElementType.getParameterList());
             }
 
 
             public void parseDoLoopStatement() {
                 var mark = builder.mark();
 
+                expectAdvance(ForthTokenType.getDO(), "do");
+                parseStatement();
+                expectAdvance(ForthTokenType.getLOOP(), "loop");
 
-
-
+                mark.done(ForthElementType.getDoLoopStatement());
             }
 
             public void parseBeginUntilStatement() {
+                var mark = builder.mark();
 
+                expectAdvance(ForthTokenType.getBEGIN(), "begin");
+                parseStatement();
+                expectAdvance(ForthTokenType.getUNTIL(), "until");
 
-
-
+                mark.done(ForthElementType.getBeginUntilStatement());
 
             }
 

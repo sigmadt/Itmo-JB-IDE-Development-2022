@@ -65,6 +65,9 @@ public class ForthTokenType extends IElementType {
     private static ForthTokenType STRING = new ForthTokenType("STRING"); // ." "
     private static ForthTokenType NUMBER = new ForthTokenType("NUMBER"); // 17
 
+    private static ForthTokenType NEW_TOKEN = new ForthTokenType("NEW_TOKEN");
+
+
     public static TokenSet KEYWORDS =
             TokenSet.create(
             DOUBLE_COLON, SEMICOLON,
@@ -102,6 +105,29 @@ public class ForthTokenType extends IElementType {
                     MUL, DIV, MOD, DIV_AND_MOD, AND
             );
 
+
+
+    public static TokenSet ANY_FUNCTION =
+            TokenSet.create(
+                    ADD, SUB, MUL, DIV, MOD, DIV_AND_MOD,
+                    AND, OR, EQUAL, LESS, GREATER
+            );
+
+    public static TokenSet ANY_GOOD_TOKENS =
+            TokenSet.create(
+                    ADD, SUB, MUL, DIV, MOD, DIV_AND_MOD,
+                    AND, OR, EQUAL, LESS, GREATER,
+                    NUMBER, STRING,
+                    DOT, STACK, SWAP,
+                    DUP, ROT, OVER,
+                    DROP
+            );
+
+    public static TokenSet QUALIFIERS =
+            TokenSet.create(
+                    NUMBER, STRING, IDENTIFIER
+            );
+
     public static TokenSet IDENTS =
             TokenSet.create(SPACE, NEW_LINE);
 
@@ -113,17 +139,6 @@ public class ForthTokenType extends IElementType {
 
     public static TokenSet CONSTANTS = TokenSet.create(TRUE, FALSE);
 
-    public static ForthTokenType getDoubleColon() {
-        return DOUBLE_COLON;
-    }
-
-    public static ForthTokenType getCompileMode() {
-        return COMPILE_MODE;
-    }
-
-    public static ForthTokenType getDivAndMod() {
-        return DIV_AND_MOD;
-    }
 
     public static ForthTokenType getSTRING() {
         return STRING;

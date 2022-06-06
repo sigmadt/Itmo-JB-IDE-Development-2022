@@ -10,7 +10,7 @@ public class ForthFileType extends LanguageFileType {
 
     public static final ForthFileType INSTANCE = new ForthFileType();
 
-    private ForthFileType() {
+    public ForthFileType() {
         super(ForthLanguage.INSTANCE);
     }
 
