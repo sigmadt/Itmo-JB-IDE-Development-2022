@@ -43,7 +43,7 @@ public class ForthParser implements PsiParser {
                 PsiBuilder.Marker mark = builder.mark();
 
                 while (builder.getTokenType() != null) {
-                    if (builder.getTokenType().equals(ForthTokenType.getDOUBLE_COLON())) {
+                    if (ForthTokenType.getDOUBLE_COLON().equals(builder.getTokenType())) {
                         parseCompileModeBlock();
                     } else {
                         parseStatement();
@@ -118,13 +118,14 @@ public class ForthParser implements PsiParser {
             * (cond) ? (iftrue) : (else) and continue with then
             *
             * */
+            // : less17 dup 17 > if ." Greater than 17!" else ." Less than 17!" then ;
             public void parseIfElseThenStatement() {
                 PsiBuilder.Marker mark = builder.mark();
 
                 parseExpression(); // (cond)
                 expectAdvance(ForthTokenType.getIF(), "if");
                 parseStatement(); // (iftrue)
-                if (builder.getTokenType().equals(ForthTokenType.getELSE())) {
+                if (ForthTokenType.getELSE().equals(builder.getTokenType())) {
                     expectAdvance(ForthTokenType.getELSE(), "else");
                     parseStatement(); // (elsetrue)
                 }
@@ -139,13 +140,13 @@ public class ForthParser implements PsiParser {
                 PsiBuilder.Marker mark = builder.mark();
 
                 while (ForthTokenType.QUALIFIERS.contains(builder.getTokenType())) {
-                    if (builder.getTokenType().equals(ForthTokenType.getNUMBER())) {
+                    if (ForthTokenType.getNUMBER().equals(builder.getTokenType())) {
                         expectAdvance(ForthTokenType.getNUMBER(), "NUMBER");
                     }
-                    else if (builder.getTokenType().equals(ForthTokenType.getSTRING())) {
+                    else if (ForthTokenType.getSTRING().equals(builder.getTokenType())) {
                         expectAdvance(ForthTokenType.getSTRING(), "STRING");
                     }
-                    else if (builder.getTokenType().equals(ForthTokenType.getIDENTIFIER())) {
+                    else if (ForthTokenType.getIDENTIFIER().equals(builder.getTokenType())) {
                         expectAdvance(ForthTokenType.getIDENTIFIER(), "IDENTIFIER");
                     }
                 }
@@ -226,26 +227,26 @@ public class ForthParser implements PsiParser {
 
             public void parseStackOperations() {
                 PsiBuilder.Marker mark = builder.mark();
-                while (ForthTokenType.ANY_GOOD_TOKENS.contains(builder.getTokenType())) {
-                    if (builder.getTokenType().equals(ForthTokenType.getROT())) {
+                while (ForthTokenType.STACK_OPERATIONS.contains(builder.getTokenType())) {
+                    if (ForthTokenType.getROT().equals(builder.getTokenType())) {
                         expectAdvance(ForthTokenType.getROT(), "ROT");
                     }
-                    else if (builder.getTokenType().equals(ForthTokenType.getOVER())) {
+                    else if (ForthTokenType.getOVER().equals(builder.getTokenType())) {
                         expectAdvance(ForthTokenType.getOVER(), "OVER");
                     }
-                    else if (builder.getTokenType().equals(ForthTokenType.getDOT())) {
+                    else if (ForthTokenType.getDOT().equals(builder.getTokenType())) {
                         expectAdvance(ForthTokenType.getDOT(), "DOT");
                     }
-                    else if (builder.getTokenType().equals(ForthTokenType.getSTACK())) {
+                    else if (ForthTokenType.getSTACK().equals(builder.getTokenType())) {
                         expectAdvance(ForthTokenType.getSTACK(), "STACK");
                     }
-                    else if (builder.getTokenType().equals(ForthTokenType.getSWAP())) {
+                    else if (ForthTokenType.getSWAP().equals(builder.getTokenType())) {
                         expectAdvance(ForthTokenType.getSWAP(), "SWAP");
                     }
-                    else if (builder.getTokenType().equals(ForthTokenType.getDUP())) {
+                    else if (ForthTokenType.getDUP().equals(builder.getTokenType())) {
                         expectAdvance(ForthTokenType.getDUP(), "DUP");
                     }
-                    else if (builder.getTokenType().equals(ForthTokenType.getDROP())) {
+                    else if (ForthTokenType.getDROP().equals(builder.getTokenType())) {
                         expectAdvance(ForthTokenType.getDROP(), "DROP");
                     }
 
@@ -277,7 +278,7 @@ public class ForthParser implements PsiParser {
                 PsiBuilder.Marker mark = builder.mark();
 
                 while (!ForthTokenType.ANY_FUNCTION.contains(builder.getTokenType())) {
-                    if (builder.getTokenType().equals(ForthTokenType.getIDENTIFIER())) {
+                    if (ForthTokenType.getIDENTIFIER().equals(builder.getTokenType())) {
                         parseIdentifier();
                     }
                     parseNum();
@@ -313,7 +314,7 @@ public class ForthParser implements PsiParser {
 
             // helper methods
             private boolean expectAdvance(ForthTokenType expectedTokenType, String expectedName) {
-                if (builder.getTokenType() == expectedTokenType) {
+                if (expectedTokenType.equals(builder.getTokenType())) {
                     advance();
                     return true;
                 }
@@ -326,7 +327,7 @@ public class ForthParser implements PsiParser {
             private IElementType advance() {
                 IElementType result = builder.getTokenType();
                 builder.advanceLexer();
-                while (builder.getTokenType() == TokenType.BAD_CHARACTER) {
+                while (TokenType.BAD_CHARACTER.equals(builder.getTokenType())) {
                     PsiBuilder.Marker badMark = builder.mark();
                     builder.advanceLexer();
                     badMark.error("Unexpected character");
