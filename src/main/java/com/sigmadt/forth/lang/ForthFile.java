@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 public class ForthFile extends PsiFileBase implements NavigatablePsiElement {
 
     public ForthFile(FileViewProvider viewProvider) {
-        super(viewProvider, new ForthLanguage());
+        super(viewProvider, ForthLanguage.INSTANCE);
     }
 
     @Override

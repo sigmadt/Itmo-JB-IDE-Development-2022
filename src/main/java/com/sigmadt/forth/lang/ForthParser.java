@@ -13,7 +13,7 @@ public class ForthParser implements PsiParser {
         @NotNull
         public  ASTNode parse(@NotNull IElementType root, @NotNull PsiBuilder builder) {
             builder.setDebugMode(true);
-            var inner = new InnerParser(builder);
+            InnerParser inner = new InnerParser(builder);
             inner.parseFile();
             return builder.getTreeBuilt();
         }
@@ -26,7 +26,7 @@ public class ForthParser implements PsiParser {
             }
 
             public void parseFile() {
-                var mark = builder.mark();
+                PsiBuilder.Marker mark = builder.mark();
 
                 parseAnyBlock();
 
@@ -40,7 +40,7 @@ public class ForthParser implements PsiParser {
              */
 
             public void parseAnyBlock() {
-                var mark = builder.mark();
+                PsiBuilder.Marker mark = builder.mark();
 
                 while (builder.getTokenType() != null) {
                     if (builder.getTokenType().equals(ForthTokenType.getDOUBLE_COLON())) {
@@ -54,10 +54,10 @@ public class ForthParser implements PsiParser {
             }
 
             public void parseStatement() {
-                var mark = builder.mark();
+                PsiBuilder.Marker mark = builder.mark();
 
                 while (ForthTokenType.ANY_GOOD_TOKENS.contains(builder.getTokenType())) {
-                    var currElem = builder.getTokenType();
+                    IElementType currElem = builder.getTokenType();
                     if (ForthTokenType.QUALIFIERS.contains(currElem)) {
                         parseQualifiers();
                     }
@@ -84,7 +84,7 @@ public class ForthParser implements PsiParser {
             * */
 
             public void parseCompileModeBlock() {
-                var mark = builder.mark();
+                PsiBuilder.Marker mark = builder.mark();
 
                 expectAdvance(ForthTokenType.getDOUBLE_COLON(), ":");
                 parseIdentifier();
@@ -96,14 +96,14 @@ public class ForthParser implements PsiParser {
             }
 
             public void parseIdentifier() {
-                var mark = builder.mark();
+                PsiBuilder.Marker mark = builder.mark();
                 expectAdvance(ForthTokenType.getIDENTIFIER(), "IDENTIFIER");
                 mark.done(ForthElementType.getIDENTIFIER());
             }
 
 
             public void parseCompileModeBody() {
-                var mark = builder.mark();
+                PsiBuilder.Marker mark = builder.mark();
 
                 parseIfElseThenStatement();
                 parseDoLoopStatement();
@@ -119,7 +119,7 @@ public class ForthParser implements PsiParser {
             *
             * */
             public void parseIfElseThenStatement() {
-                var mark = builder.mark();
+                PsiBuilder.Marker mark = builder.mark();
 
                 parseExpression(); // (cond)
                 expectAdvance(ForthTokenType.getIF(), "if");
@@ -136,7 +136,7 @@ public class ForthParser implements PsiParser {
 
             // numbers | identifiers | strings
             public void parseQualifiers() {
-                var mark = builder.mark();
+                PsiBuilder.Marker mark = builder.mark();
 
                 while (ForthTokenType.QUALIFIERS.contains(builder.getTokenType())) {
                     if (builder.getTokenType().equals(ForthTokenType.getNUMBER())) {
@@ -157,7 +157,7 @@ public class ForthParser implements PsiParser {
 
 
             public void parseExpression() {
-                var mark = builder.mark();
+                PsiBuilder.Marker mark = builder.mark();
 
                 parseMathExpression();
                 if (ForthTokenType.COMPARISON_OPERATORS.contains(builder.getTokenType())) {
@@ -169,7 +169,7 @@ public class ForthParser implements PsiParser {
             }
 
             public void parseCompOperExpression() {
-                var mark = builder.mark();
+                PsiBuilder.Marker mark = builder.mark();
 
                 IElementType tokenType = builder.getTokenType();
                 if (ForthTokenType.getEQUAL().equals(tokenType)) {
@@ -187,7 +187,7 @@ public class ForthParser implements PsiParser {
 
             // postfix : (term1) (term2) (oper)
             public void parseMathExpression() {
-                var mark = builder.mark();
+                PsiBuilder.Marker mark = builder.mark();
 
                 parseInnerTerm();
                 while (ForthTokenType.OPERATORS.contains(builder.getTokenType())) {
@@ -200,7 +200,7 @@ public class ForthParser implements PsiParser {
 
             // + - or
             public void parseMathOperations() {
-                var mark = builder.mark();
+                PsiBuilder.Marker mark = builder.mark();
 
                 IElementType tokenType = builder.getTokenType();
                 if (ForthTokenType.getADD().equals(tokenType)) {
@@ -225,7 +225,7 @@ public class ForthParser implements PsiParser {
             }
 
             public void parseStackOperations() {
-                var mark = builder.mark();
+                PsiBuilder.Marker mark = builder.mark();
                 while (ForthTokenType.ANY_GOOD_TOKENS.contains(builder.getTokenType())) {
                     if (builder.getTokenType().equals(ForthTokenType.getROT())) {
                         expectAdvance(ForthTokenType.getROT(), "ROT");
@@ -254,27 +254,27 @@ public class ForthParser implements PsiParser {
             }
 
             public void parseInnerTerm() {
-                var mark = builder.mark();
+                PsiBuilder.Marker mark = builder.mark();
                 parseParameterList();
                 mark.done(ForthElementType.getInnerTermExpression());
 
             }
 
             public void parseNum() {
-                var mark = builder.mark();
+                PsiBuilder.Marker mark = builder.mark();
                 expectAdvance(ForthTokenType.getNUMBER(), "NUMBER");
                 mark.done(ForthElementType.getNUMBER());
             }
 
             public void parseString() {
-                var mark = builder.mark();
+                PsiBuilder.Marker mark = builder.mark();
                 expectAdvance(ForthTokenType.getSTRING(), "STRING");
                 mark.done(ForthElementType.getSTRING());
             }
 
             // parameters are always numbers and parse until variable
             public void parseParameterList() {
-                var mark = builder.mark();
+                PsiBuilder.Marker mark = builder.mark();
 
                 while (!ForthTokenType.ANY_FUNCTION.contains(builder.getTokenType())) {
                     if (builder.getTokenType().equals(ForthTokenType.getIDENTIFIER())) {
@@ -288,7 +288,7 @@ public class ForthParser implements PsiParser {
 
 
             public void parseDoLoopStatement() {
-                var mark = builder.mark();
+                PsiBuilder.Marker mark = builder.mark();
 
                 expectAdvance(ForthTokenType.getDO(), "do");
                 parseStatement();
@@ -298,7 +298,7 @@ public class ForthParser implements PsiParser {
             }
 
             public void parseBeginUntilStatement() {
-                var mark = builder.mark();
+                PsiBuilder.Marker mark = builder.mark();
 
                 expectAdvance(ForthTokenType.getBEGIN(), "begin");
                 parseStatement();
@@ -324,10 +324,10 @@ public class ForthParser implements PsiParser {
             }
 
             private IElementType advance() {
-                var result = builder.getTokenType();
+                IElementType result = builder.getTokenType();
                 builder.advanceLexer();
                 while (builder.getTokenType() == TokenType.BAD_CHARACTER) {
-                    var badMark = builder.mark();
+                    PsiBuilder.Marker badMark = builder.mark();
                     builder.advanceLexer();
                     badMark.error("Unexpected character");
                 }
@@ -335,7 +335,7 @@ public class ForthParser implements PsiParser {
             }
 
             private void errorAdvance(String expectedName) {
-                var mark = builder.mark();
+                PsiBuilder.Marker mark = builder.mark();
                 advance();
                 mark.error(String.format("Expected %s", expectedName));
             }

@@ -11,12 +11,12 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
 public class ForthElementType extends IElementType {
-    private static IFileElementType FORTH_FILE = new IFileElementType(new ForthLanguage());
+    private static IFileElementType FORTH_FILE = new IFileElementType(ForthLanguage.INSTANCE);
 
 
 
     private static IStubFileElementType<PsiFileStub<ForthFile>> FORTH_STUB_FILE =
-            new IStubFileElementType<>(new ForthLanguage());
+            new IStubFileElementType<>(ForthLanguage.INSTANCE);
 
 
     /* TYPES */

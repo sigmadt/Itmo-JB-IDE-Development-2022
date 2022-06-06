@@ -18,10 +18,10 @@
                 language="Forth"
                 implementationClass="com.sigmadt.forth.ide.ForthSyntaxHighlighterFactory"
         />
-<!--        <lang.parserDefinition-->
-<!--                language="forth"-->
-<!--                implementationClass="com.sigmadt.forth.lang.ForthParserDefinition"-->
-<!--        />-->
+        <lang.parserDefinition
+                language="Forth"
+                implementationClass="com.sigmadt.forth.lang.ForthParserDefinition"
+        />
         <colorSettingsPage implementation="com.sigmadt.forth.ide.ForthColorSettingsPage"/>
 <!--        <additionalTextAttributes-->
 <!--                scheme="Darcula"-->
